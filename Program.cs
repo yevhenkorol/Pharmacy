@@ -117,6 +117,9 @@ namespace Pharmacy
             int lineWidth = 12 + 6 * cols + 8;
             Console.WriteLine(new string('-', lineWidth));
 
+            int[] colTotals = new int[cols];
+            int grandTotal = 0;
+
             for (int r = 0; r < rows; r++)
             {
                 int rowTotal = 0; // для кожного рядка рахуємо заново
@@ -126,9 +129,19 @@ namespace Pharmacy
                     int sold = 8 + (r * 7 + c * 5) % 13; // умовні дані
                     Console.Write($"{sold,6}");
                     rowTotal += sold;
+                    colTotals[c] += sold;
                 }
                 Console.WriteLine($"{rowTotal,8}"); // Console.WriteLine() після внутрішнього циклу
+                grandTotal += rowTotal;
             }
+
+            Console.WriteLine(new string('-', lineWidth));
+            Console.Write($"{"Разом",-12}");
+            for (int c = 0; c < cols; c++)
+            {
+                Console.Write($"{colTotals[c],6}");
+            }
+            Console.WriteLine($"{grandTotal,8}");
         }
     }
 }
