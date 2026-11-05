@@ -102,8 +102,14 @@ namespace Pharmacy
             string[] forms = { "Таблетки", "Капсули", "Сироп", "Краплі", "Мазь", "Порошок" };
             string[] days = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд" };
 
-            int rows = forms.Length;
-            int cols = days.Length;
+            if (!ReadSize($"Скільки форм випуску показати (1-{forms.Length}): ", forms.Length, out int rows))
+            {
+                return;
+            }
+            if (!ReadSize($"Скільки днів показати (1-{days.Length}): ", days.Length, out int cols))
+            {
+                return;
+            }
 
             Console.WriteLine();
             Console.WriteLine("Продано упаковок за тиждень");
@@ -142,6 +148,30 @@ namespace Pharmacy
                 Console.Write($"{colTotals[c],6}");
             }
             Console.WriteLine($"{grandTotal,8}");
+        }
+
+        // читає розмір таблиці; false, якщо ввід некоректний
+        static bool ReadSize(string prompt, int max, out int value)
+        {
+            Console.Write(prompt);
+            string text = Console.ReadLine();
+
+            if (!int.TryParse(text, out value))
+            {
+                Console.WriteLine("Помилка: це не ціле число. Таблицю не побудовано.");
+                return false;
+            }
+            if (value <= 0)
+            {
+                Console.WriteLine("Помилка: число має бути більшим за нуль. Таблицю не побудовано.");
+                return false;
+            }
+            if (value > max)
+            {
+                Console.WriteLine($"Помилка: не більше {max}. Таблицю не побудовано.");
+                return false;
+            }
+            return true;
         }
     }
 }
