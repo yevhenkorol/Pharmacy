@@ -28,7 +28,7 @@ namespace Pharmacy
                 switch (choice)
                 {
                     case "1":
-                        Console.WriteLine("Поки не зроблено.");
+                        ShowAbout();
                         Pause();
                         break;
                     case "2":
@@ -56,6 +56,24 @@ namespace Pharmacy
             Console.WriteLine("\nНатисніть будь-яку клавішу...");
             Console.ReadKey(true); // true — не показувати символ
             Console.Clear();
+        }
+
+        static void ShowAbout()
+        {
+            Console.WriteLine("Тема проєкту: Аптека (облік лікарських засобів).");
+            Console.WriteLine("Сутності: Користувач, Лікарський засіб, Форма випуску (довідник).");
+            Console.WriteLine();
+            Console.WriteLine("Головна сутність: Лікарський засіб. Полів: 8.");
+            Console.WriteLine("  int    код");
+            Console.WriteLine("  string назва");
+            Console.WriteLine("  string виробник");
+            Console.WriteLine("  int    код форми випуску (з довідника)");
+            Console.WriteLine("  int    кількість");
+            Console.WriteLine("  double ціна");
+            Console.WriteLine("  int    термін придатності");
+            Console.WriteLine("  bool   чи за рецептом");
+            Console.WriteLine();
+            Console.WriteLine("Підсумок: ліки, у яких термін придатності спливає за 30 днів.");
         }
     }
 }
