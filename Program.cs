@@ -32,7 +32,7 @@ namespace Pharmacy
                         Pause();
                         break;
                     case "2":
-                        Console.WriteLine("Поки не зроблено.");
+                        ShowCostTable();
                         Pause();
                         break;
                     case "3":
@@ -74,6 +74,27 @@ namespace Pharmacy
             Console.WriteLine("  bool   чи за рецептом");
             Console.WriteLine();
             Console.WriteLine("Підсумок: ліки, у яких термін придатності спливає за 30 днів.");
+        }
+
+        static void ShowCostTable()
+        {
+            const double PricePerGram = 18.5; // ціна за 1 г порошку, грн
+            double from = 0.5;
+            double to = 3.0;
+            double step = 0.25;
+
+            Console.WriteLine("Вартість порошку залежно від маси (знижка 5 % за грам, до 15 %)");
+            Console.WriteLine($"{"Маса, г",10}{"Без знижки",14}{"Зі знижкою",14}");
+            Console.WriteLine(new string('-', 38));
+
+            // 1e-9 — запас, щоб остання стрічка не зникла через похибку double
+            for (double x = from; x <= to + 1e-9; x += step)
+            {
+                double full = x * PricePerGram;
+                double discount = Math.Min(0.15, 0.05 * x);
+                double withDiscount = full * (1 - discount);
+                Console.WriteLine($"{x,10:F2}{full,14:F2}{withDiscount,14:F2}");
+            }
         }
     }
 }
