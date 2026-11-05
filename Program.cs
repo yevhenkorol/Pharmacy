@@ -36,7 +36,7 @@ namespace Pharmacy
                         Pause();
                         break;
                     case "3":
-                        Console.WriteLine("Поки не зроблено.");
+                        ShowWeeklyTable();
                         Pause();
                         break;
                     case "0":
@@ -94,6 +94,40 @@ namespace Pharmacy
                 double discount = Math.Min(0.15, 0.05 * x);
                 double withDiscount = full * (1 - discount);
                 Console.WriteLine($"{x,10:F2}{full,14:F2}{withDiscount,14:F2}");
+            }
+        }
+
+        static void ShowWeeklyTable()
+        {
+            string[] forms = { "Таблетки", "Капсули", "Сироп", "Краплі", "Мазь", "Порошок" };
+            string[] days = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд" };
+
+            int rows = forms.Length;
+            int cols = days.Length;
+
+            Console.WriteLine();
+            Console.WriteLine("Продано упаковок за тиждень");
+            Console.Write($"{"Форма",-12}");
+            for (int c = 0; c < cols; c++)
+            {
+                Console.Write($"{days[c],6}");
+            }
+            Console.WriteLine($"{"Разом",8}");
+
+            int lineWidth = 12 + 6 * cols + 8;
+            Console.WriteLine(new string('-', lineWidth));
+
+            for (int r = 0; r < rows; r++)
+            {
+                int rowTotal = 0; // для кожного рядка рахуємо заново
+                Console.Write($"{forms[r],-12}");
+                for (int c = 0; c < cols; c++)
+                {
+                    int sold = 8 + (r * 7 + c * 5) % 13; // умовні дані
+                    Console.Write($"{sold,6}");
+                    rowTotal += sold;
+                }
+                Console.WriteLine($"{rowTotal,8}"); // Console.WriteLine() після внутрішнього циклу
             }
         }
     }
