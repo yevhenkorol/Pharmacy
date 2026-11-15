@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text;
 
 namespace Pharmacy
@@ -55,7 +56,7 @@ namespace Pharmacy
         static void Pause()
         {
             Console.WriteLine("\nНатисніть будь-яку клавішу...");
-            Console.ReadKey(true); // true — не показувати символ
+            Console.ReadKey(true); // не показувати символ
             Console.Clear();
         }
 
@@ -86,10 +87,13 @@ namespace Pharmacy
 
         static void ShowCostTable()
         {
-            PrintCostTable(0.5, 3.0, 0.25);
+            double start = ReadDouble("Початкова маса, г: ", 0.1, 1000);
+            double end = ReadDouble("Кінцева маса, г: ", start, 1000);
+            double step = ReadDouble("Крок, г: ", 0.01, 1000);
+            PrintCostTable(start, end, step);
         }
 
-        static void PrintCostTable(double from, double to, double step)
+        static void PrintCostTable(double start, double end, double step)
         {
             const double PricePerGram = 18.5; // ціна за 1 г порошку, грн
 
@@ -97,8 +101,8 @@ namespace Pharmacy
             Console.WriteLine($"{"Маса, г",10}{"Без знижки",14}{"Зі знижкою",14}");
             Console.WriteLine(new string('-', 38));
 
-            // 1e-9 — запас, щоб остання стрічка не зникла через похибку double
-            for (double x = from; x <= to + 1e-9; x += step)
+            // запас на похибку double
+            for (double x = start; x <= end + 1e-9; x += step)
             {
                 double full = x * PricePerGram;
                 Console.WriteLine($"{x,10:F2}{full,14:F2}{CalculateCost(x, PricePerGram),14:F2}");
@@ -180,6 +184,51 @@ namespace Pharmacy
                 return false;
             }
             return true;
+        }
+
+        // читає дійсне число в межах [min; max], доки не отримає прийнятне
+        static double ReadDouble(string prompt, double min, double max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string text = Console.ReadLine();
+
+                // приймаємо і кому, і крапку як десятковий роздільник
+                if (!double.TryParse((text ?? "").Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                {
+                    Console.WriteLine("Помилка: це не число. Спробуйте ще раз.");
+                    continue;
+                }
+                if (double.IsNaN(value) || value < min || value > max)
+                {
+                    Console.WriteLine($"Помилка: число має бути від {min} до {max}. Спробуйте ще раз.");
+                    continue;
+                }
+                return value;
+            }
+        }
+
+        // читає ціле число в межах [min; max], доки не отримає прийнятне
+        static int ReadInt(string prompt, int min, int max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string text = Console.ReadLine();
+
+                if (!int.TryParse(text, out int value))
+                {
+                    Console.WriteLine("Помилка: це не ціле число. Спробуйте ще раз.");
+                    continue;
+                }
+                if (value < min || value > max)
+                {
+                    Console.WriteLine($"Помилка: число має бути від {min} до {max}. Спробуйте ще раз.");
+                    continue;
+                }
+                return value;
+            }
         }
     }
 }
