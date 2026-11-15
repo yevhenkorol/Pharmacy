@@ -6,6 +6,9 @@ namespace Pharmacy
 {
     internal class Program
     {
+        static readonly string[] forms = { "Таблетки", "Капсули", "Сироп", "Краплі", "Мазь", "Порошок" };
+        static readonly string[] days = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд" };
+
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -109,20 +112,16 @@ namespace Pharmacy
             }
         }
 
+        // читає розміри таблиці й передає їх у PrintWeeklyTable
         static void ShowWeeklyTable()
         {
-            string[] forms = { "Таблетки", "Капсули", "Сироп", "Краплі", "Мазь", "Порошок" };
-            string[] days = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд" };
+            int rows = ReadInt($"Скільки форм випуску показати (1-{forms.Length}): ", 1, forms.Length);
+            int cols = ReadInt($"Скільки днів показати (1-{days.Length}): ", 1, days.Length);
+            PrintWeeklyTable(rows, cols);
+        }
 
-            if (!ReadSize($"Скільки форм випуску показати (1-{forms.Length}): ", forms.Length, out int rows))
-            {
-                return;
-            }
-            if (!ReadSize($"Скільки днів показати (1-{days.Length}): ", days.Length, out int cols))
-            {
-                return;
-            }
-
+        static void PrintWeeklyTable(int rows, int cols)
+        {
             Console.WriteLine();
             Console.WriteLine("Продано упаковок за тиждень");
             Console.Write($"{"Форма",-12}");
@@ -133,27 +132,27 @@ namespace Pharmacy
             Console.WriteLine($"{"Разом",8}");
 
             int lineWidth = 12 + 6 * cols + 8;
-            Console.WriteLine(new string('-', lineWidth));
+            PrintLine(lineWidth);
 
             int[] colTotals = new int[cols];
             int grandTotal = 0;
 
             for (int r = 0; r < rows; r++)
             {
-                int rowTotal = 0; // для кожного рядка рахуємо заново
+                int rowTotal = 0;
                 Console.Write($"{forms[r],-12}");
                 for (int c = 0; c < cols; c++)
                 {
-                    int sold = 8 + (r * 7 + c * 5) % 13; // умовні дані
+                    int sold = GetSold(r, c);
                     Console.Write($"{sold,6}");
                     rowTotal += sold;
                     colTotals[c] += sold;
                 }
-                Console.WriteLine($"{rowTotal,8}"); // Console.WriteLine() після внутрішнього циклу
+                Console.WriteLine($"{rowTotal,8}");
                 grandTotal += rowTotal;
             }
 
-            Console.WriteLine(new string('-', lineWidth));
+            PrintLine(lineWidth);
             Console.Write($"{"Разом",-12}");
             for (int c = 0; c < cols; c++)
             {
@@ -162,28 +161,14 @@ namespace Pharmacy
             Console.WriteLine($"{grandTotal,8}");
         }
 
-        // читає розмір таблиці; false, якщо ввід некоректний
-        static bool ReadSize(string prompt, int max, out int value)
+        static int GetSold(int r, int c)
         {
-            Console.Write(prompt);
-            string text = Console.ReadLine();
+            return 8 + (r * 7 + c * 5) % 13;
+        }
 
-            if (!int.TryParse(text, out value))
-            {
-                Console.WriteLine("Помилка: це не ціле число. Таблицю не побудовано.");
-                return false;
-            }
-            if (value <= 0)
-            {
-                Console.WriteLine("Помилка: число має бути більшим за нуль. Таблицю не побудовано.");
-                return false;
-            }
-            if (value > max)
-            {
-                Console.WriteLine($"Помилка: не більше {max}. Таблицю не побудовано.");
-                return false;
-            }
-            return true;
+        static void PrintLine(int width)
+        {
+            Console.WriteLine(new string('-', width));
         }
 
         // читає дійсне число в межах [min; max], доки не отримає прийнятне
