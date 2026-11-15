@@ -22,28 +22,18 @@ namespace Pharmacy
 
                 switch (choice)
                 {
-                    case "1":
-                        ShowAbout();
-                        Pause();
-                        break;
-                    case "2":
-                        ShowCostTable();
-                        Pause();
-                        break;
-                    case "3":
-                        ShowWeeklyTable();
-                        Pause();
-                        break;
-                    case "0":
-                        running = false; // єдиний вихід із циклу
-                        Console.WriteLine("До побачення.");
-                        break;
+                    case "1": ShowAbout(); Pause(); break;
+                    case "2": ShowCostTable(); Pause(); break;
+                    case "3": ShowWeeklyTable(); Pause(); break;
+                    case "0": running = false; break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
                         Pause();
                         break;
                 }
             }
+
+            Console.WriteLine("До побачення.");
         }
 
         static void ShowMenu()
