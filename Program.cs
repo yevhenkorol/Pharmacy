@@ -12,17 +12,8 @@ namespace Pharmacy
             bool running = true;
             while (running)
             {
-                Console.WriteLine("=== Аптека ===");
-                Console.WriteLine("1 — довідка");
-                Console.WriteLine("2 — вартість порошку залежно від маси");
-                Console.WriteLine("3 — продажі за тиждень за формами випуску");
-                Console.WriteLine("0 — вихід");
-                Console.Write("Ваш вибір: ");
-                string choice = Console.ReadLine();
-                if (choice != null)
-                {
-                    choice = choice.Trim();
-                }
+                ShowMenu();
+                string choice = (Console.ReadLine() ?? "").Trim();
                 Console.WriteLine();
 
                 switch (choice)
@@ -49,6 +40,16 @@ namespace Pharmacy
                         break;
                 }
             }
+        }
+
+        static void ShowMenu()
+        {
+            Console.WriteLine("=== Аптека ===");
+            Console.WriteLine("1 — довідка");
+            Console.WriteLine("2 — вартість порошку залежно від маси");
+            Console.WriteLine("3 — продажі за тиждень за формами випуску");
+            Console.WriteLine("0 — вихід");
+            Console.Write("Ваш вибір: ");
         }
 
         static void Pause()
