@@ -10,6 +10,9 @@ namespace Pharmacy
         {
             Console.OutputEncoding = Encoding.UTF8;
 
+            double[] prices = new double[100];
+            int count = 0;
+
             bool running = true;
             while (running)
             {
@@ -22,6 +25,15 @@ namespace Pharmacy
                     case "1": ShowAbout(); Pause(); break;
                     case "2": ShowCostTable(); Pause(); break;
                     case "3": ShowWeeklyTable(); Pause(); break;
+                    case "4":
+                    {
+                        double newPrice = ReadDouble("Ціна, грн: ", 0.01, 100000);
+                        AddValue(prices, ref count, newPrice, prices.Length);
+                        Console.WriteLine($"Значень у списку: {count}");
+                        Pause();
+                        break;
+                    }
+                    case "5": PrintValues(prices, count); Pause(); break;
                     case "0": running = false; break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -39,6 +51,8 @@ namespace Pharmacy
             Console.WriteLine("1 — довідка");
             Console.WriteLine("2 — вартість порошку залежно від маси");
             Console.WriteLine("3 — продажі за тиждень за формами випуску");
+            Console.WriteLine("4 — додати ціну");
+            Console.WriteLine("5 — показати список");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -158,6 +172,37 @@ namespace Pharmacy
         static void PrintLine(int width)
         {
             Console.WriteLine(new string('-', width));
+        }
+
+        // масив змінюється на місці, лічильник повертаємо через ref
+        static void AddValue(double[] values, ref int count, double newValue, int capacity)
+        {
+            if (count == capacity)
+            {
+                Console.WriteLine("Місця більше немає.");
+                return;
+            }
+
+            values[count] = newValue;
+            count++;
+        }
+
+        static void PrintValues(double[] values, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Список порожній.");
+                return;
+            }
+
+            Console.WriteLine("Список цін");
+            Console.WriteLine($"{"№",4}{"Ціна, грн",14}");
+            PrintLine(18);
+
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine($"{i + 1,4}{values[i],14:F2}");
+            }
         }
 
         // повторює запит, доки число не в межах
