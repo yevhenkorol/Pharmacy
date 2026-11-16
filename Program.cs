@@ -6,9 +6,6 @@ namespace Pharmacy
 {
     internal class Program
     {
-        static readonly string[] forms = { "Таблетки", "Капсули", "Сироп", "Краплі", "Мазь", "Порошок" };
-        static readonly string[] days = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд" };
-
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -102,15 +99,17 @@ namespace Pharmacy
             }
         }
 
-        // читає розміри таблиці й передає їх у PrintWeeklyTable
         static void ShowWeeklyTable()
         {
+            string[] forms = { "Таблетки", "Капсули", "Сироп", "Краплі", "Мазь", "Порошок" };
+            string[] days = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд" };
+
             int rows = ReadInt($"Скільки форм випуску показати (1-{forms.Length}): ", 1, forms.Length);
             int cols = ReadInt($"Скільки днів показати (1-{days.Length}): ", 1, days.Length);
-            PrintWeeklyTable(rows, cols);
+            PrintWeeklyTable(forms, days, rows, cols);
         }
 
-        static void PrintWeeklyTable(int rows, int cols)
+        static void PrintWeeklyTable(string[] forms, string[] days, int rows, int cols)
         {
             Console.WriteLine();
             Console.WriteLine("Продано упаковок за тиждень");
@@ -161,7 +160,7 @@ namespace Pharmacy
             Console.WriteLine(new string('-', width));
         }
 
-        // читає дійсне число в межах [min; max], доки не отримає прийнятне
+        // повторює запит, доки число не в межах
         static double ReadDouble(string prompt, double min, double max)
         {
             while (true)
@@ -184,7 +183,7 @@ namespace Pharmacy
             }
         }
 
-        // читає ціле число в межах [min; max], доки не отримає прийнятне
+        // повторює запит, доки число не в межах
         static int ReadInt(string prompt, int min, int max)
         {
             while (true)
