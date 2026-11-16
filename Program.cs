@@ -34,6 +34,15 @@ namespace Pharmacy
                         break;
                     }
                     case "5": PrintValues(prices, count); Pause(); break;
+                    case "6":
+                    {
+                        int removeNumber = ReadInt("Номер для видалення: ", 1, 1000000);
+                        RemoveAt(prices, ref count, removeNumber);
+                        Console.WriteLine($"Значень у списку: {count}");
+                        Pause();
+                        break;
+                    }
+                    case "7": ShowStatistics(prices, count); Pause(); break;
                     case "0": running = false; break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -53,6 +62,8 @@ namespace Pharmacy
             Console.WriteLine("3 — продажі за тиждень за формами випуску");
             Console.WriteLine("4 — додати ціну");
             Console.WriteLine("5 — показати список");
+            Console.WriteLine("6 — видалити за номером");
+            Console.WriteLine("7 — статистика (сума, середнє, максимум і його номер)");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -203,6 +214,74 @@ namespace Pharmacy
             {
                 Console.WriteLine($"{i + 1,4}{values[i],14:F2}");
             }
+        }
+
+        // номер у таблиці починається з 1
+        static void RemoveAt(double[] values, ref int count, int index)
+        {
+            if (index < 1 || index > count)
+            {
+                Console.WriteLine("Помилка: немає значення з таким номером.");
+                return;
+            }
+
+            for (int i = index - 1; i < count - 1; i++)
+            {
+                values[i] = values[i + 1];
+            }
+
+            count--;
+            values[count] = 0;
+        }
+
+        // для порожнього набору середнє дорівнює 0
+        static void Statistics(double[] values, int count, out double sum, out double average)
+        {
+            sum = 0;
+            for (int i = 0; i < count; i++)
+            {
+                sum += values[i];
+            }
+            average = count > 0 ? sum / count : 0;
+        }
+
+        // для порожнього набору обидва out дорівнюють 0
+        static void FindMax(double[] values, int count, out double max, out int maxNumber)
+        {
+            if (count == 0)
+            {
+                max = 0;
+                maxNumber = 0;
+                return;
+            }
+
+            max = values[0];
+            maxNumber = 1;
+            for (int i = 1; i < count; i++)
+            {
+                if (values[i] > max)
+                {
+                    max = values[i];
+                    maxNumber = i + 1;
+                }
+            }
+        }
+
+        // для порожнього списку статистику не друкуємо
+        static void ShowStatistics(double[] values, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Немає значень.");
+                return;
+            }
+
+            Statistics(values, count, out double sum, out double average);
+            FindMax(values, count, out double max, out int maxNumber);
+            Console.WriteLine("Статистика цін");
+            Console.WriteLine($"Сума: {sum:F2}");
+            Console.WriteLine($"Середнє: {average:F2}");
+            Console.WriteLine($"Максимум: {max:F2} (номер {maxNumber})");
         }
 
         // повторює запит, доки число не в межах
