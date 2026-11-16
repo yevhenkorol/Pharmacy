@@ -43,6 +43,7 @@ namespace Pharmacy
                         break;
                     }
                     case "7": ShowStatistics(prices, count); Pause(); break;
+                    case "8": ShowPassingDemo(); Pause(); break;
                     case "0": running = false; break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -64,6 +65,7 @@ namespace Pharmacy
             Console.WriteLine("5 — показати список");
             Console.WriteLine("6 — видалити за номером");
             Console.WriteLine("7 — статистика (сума, середнє, максимум і його номер)");
+            Console.WriteLine("8 — дослід: значиме й посилальне");
             Console.WriteLine("0 — вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -282,6 +284,35 @@ namespace Pharmacy
             Console.WriteLine($"Сума: {sum:F2}");
             Console.WriteLine($"Середнє: {average:F2}");
             Console.WriteLine($"Максимум: {max:F2} (номер {maxNumber})");
+        }
+
+        // int передається копією
+        static void ChangeIntCopy(int value)
+        {
+            value = value + 100;
+        }
+
+        // масив передається посиланням
+        static void ChangeArrayItem(int[] values)
+        {
+            values[0] = values[0] + 100;
+        }
+
+        static void ShowPassingDemo()
+        {
+            int price = 50;
+            int[] numbers = { 50, 70, 90 };
+
+            Console.WriteLine("Дослід: значиме й посилальне");
+            Console.WriteLine($"int до виклику: {price}");
+            ChangeIntCopy(price);
+            Console.WriteLine($"int після виклику: {price}");
+
+            Console.WriteLine();
+            Console.WriteLine($"Масив до виклику: {numbers[0]} {numbers[1]} {numbers[2]}");
+            ChangeArrayItem(numbers);
+            Console.WriteLine($"Масив після виклику: {numbers[0]} {numbers[1]} {numbers[2]}");
+            Console.WriteLine("Пояснення: int змінюється лише в копії, а елемент масиву — у самому масиві.");
         }
 
         // повторює запит, доки число не в межах
